@@ -47,7 +47,9 @@ class Model():
         return hawktuah[prediction]
 
     @app.route('/api/process', methods=['POST'])
-    def preprocessing(image):
+    def preprocessing(self, image):
+
+        print("Deez Nuts")
           
         image_arr = []
 
@@ -57,7 +59,9 @@ class Model():
         image_arr.append(image_as_array)
         image_arr = np.array(image_arr)
 
+        output = self.model_predict(image_arr)
+        print(output)
+        return output
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8080)
-
-#256 x 256 image
