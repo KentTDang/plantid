@@ -23,14 +23,16 @@ try {
 }
 
 const plantScheme = new mongoose.Schema({
-    plant: String,
-    date: String
+    title: String,
 })
 
 const Plant = mongoose.model("Plant", plantScheme)
 
 // Create a plant
 app.post('/plants', async(req,res) => {
+    console.log("Hit index post server")
+    console.log(req)
+    console.log(res)
     try {
         const newPlant = new Plant(req.body);
         await newPlant.save();
