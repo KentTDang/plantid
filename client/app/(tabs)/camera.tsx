@@ -1,10 +1,22 @@
-import { CameraView, CameraType, useCameraPermissions, FlashMode } from "expo-camera";
+import {
+  CameraView,
+  CameraType,
+  useCameraPermissions,
+  FlashMode,
+} from "expo-camera";
 import { useRef, useState } from "react";
-import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Button,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Dimensions,
+} from "react-native";
 
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import FontAwesome from '@expo/vector-icons/FontAwesome';
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 export default function App() {
   const [facing, setFacing] = useState<CameraType>("back");
@@ -12,6 +24,8 @@ export default function App() {
   const cameraRef = useRef<CameraView | null>(null); // Always define hooks unconditionally
 
   const [flash, FlashMode] = useState<FlashMode>("off");
+
+  const screenHeight = Dimensions.get("window").height;
 
   // If permissions are still loading
   if (!permission) {
@@ -61,25 +75,26 @@ export default function App() {
         ratio="4:3"
       >
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.cameraFlipButton} onPress={toggleCameraFacing}>
-            <MaterialIcons name="flip-camera-ios" size={45} color="white" />
-          </TouchableOpacity>
-          
-        </View>
-        <View style={styles.buttonContainer}>
-          
-          <TouchableOpacity style={styles.takePicButton} onPress={takePic}>
-            <Ionicons name="radio-button-on" size={75} color="white" />
-          </TouchableOpacity>
-        </View>
+          <View style={styles.topButtons}>
+            <TouchableOpacity style={styles.flashButton} onPress={toggleFlash}>
+              <FontAwesome name="flash" size={25} color="white" />
+            </TouchableOpacity>
 
-        <View style={styles.buttonContainer}>
-          
-          <TouchableOpacity style={styles.flashButton} onPress={toggleFlash}>
-            <FontAwesome name="flash" size={24} color="white" />
-          </TouchableOpacity>
-        </View>
+            <TouchableOpacity
+              style={styles.cameraFlipButton}
+              onPress={toggleCameraFacing}
+            >
+              <MaterialIcons name="flip-camera-ios" size={25} color="white" />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.middleOpen}></View>
 
+          <View style={styles.bottomButtons}>
+            <TouchableOpacity style={styles.takePicButton} onPress={takePic}>
+              <Ionicons name="radio-button-on" size={75} color="white" />
+            </TouchableOpacity>
+          </View>
+        </View>
       </CameraView>
     </View>
   );
@@ -95,48 +110,49 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   camera: {
-    flex: 1,
+    backgroundColor: "transparent",
   },
   buttonContainer: {
-    flex: 1,
-    flexDirection: "column",
     backgroundColor: "transparent",
-    margin: 34,
+    height: "100%",
+  },
+  topButtons: {
+    flex: 2.5,
+    flexDirection: "row", // Align children horizontally
+    justifyContent: "space-between", // Place items at the opposite sides
+    backgroundColor: "transparent",
+    alignItems: "center", // Center items vertically if needed
+    padding: 10,
+  },
+  middleOpen: {
+    flex: 8,
+    backgroundColor: "transparent",
+  },
+  bottomButtons: {
+    flex: 3,
+    backgroundColor: "transparent",
+    alignItems: "center",
   },
   cameraFlipButton: {
-    position: "absolute",
-    top: 30, // Position from the top
-    right: -10, // Position from the right
+    padding: 7,
     backgroundColor: "rgba(0, 0, 0, 0.25)", // Gray transparent background
-    width: 60, // Circle width
-    height: 60, // Circle height
+    width: 50, // Circle width
+    height: 50, // Circle height
     borderRadius: 25, // Half of width/height to make it circular
     justifyContent: "center", // Center the icon
     alignItems: "center", // Center the icon
   },
   flashButton: {
-    position: "absolute",
-    top: -530, // Position from the top
-    left: -10, // Position from the right
+    padding: 10,
     backgroundColor: "rgba(0, 0, 0, 0.25)", // Gray transparent background
-    width: 60, // Circle width
-    height: 60, // Circle height
+    width: 50, // Circle width
+    height: 50, // Circle height
     borderRadius: 25, // Half of width/height to make it circular
     justifyContent: "center", // Center the icon
     alignItems: "center", // Center the icon
   },
-  takePicButton: {
-    position: "absolute", 
-    bottom: -180, 
-    alignSelf: "center", 
-    backgroundColor: "transparent", 
-  },
+  takePicButton: {},
 
-  button: {
-    flex: 1,
-    alignSelf: "flex-end",
-    alignItems: "center",
-  },
   text: {
     fontSize: 24,
     fontWeight: "bold",
