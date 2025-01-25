@@ -50,6 +50,14 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <AntDesign name="setting" size={24} color={color} />,
         }}
       />
+      <Tabs.Screen
+        name="upload"
+        options={{
+          title: 'Upload',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="plus.square.fill" color={color} />,
+        }}
+      />
+      
     </Tabs>
   );
 }
