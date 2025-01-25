@@ -47,21 +47,18 @@ class Model():
         return hawktuah[prediction]
 
     @app.route('/api/process', methods=['POST'])
-    def preprocessing(self, image):
-
-        print("Deez Nuts")
-          
-        image_arr = []
-
-        with Image.open(f"image_path") as img:
-                        image_as_array = np.array(img)
-    
-        image_arr.append(image_as_array)
-        image_arr = np.array(image_arr)
-
-        output = self.model_predict(image_arr)
-        print(output)
-        return output
+    def process_image(self):
+        if 'image' not in request.files:
+            return "No image provided", 400
+        
+        image_file = request.files['image']
+        if image_file:
+            img = Image.open(image_file)
+            image_as_array = np.array(img.resize((256, 256)))  # Ensure resizing matches model input
+            image_arr = np.expand_dims(image_as_array, axis=0)  # Add batch dimension
+            output = self.model_instance.model_predict(image_arr)
+            return {"result": output}
+        return "Error processing image", 500
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8080)
