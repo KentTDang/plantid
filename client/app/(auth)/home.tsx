@@ -1,4 +1,4 @@
-import { View, Text, TextInput, StyleSheet, Button } from "react-native";
+import { TouchableOpacity, View, Text, TextInput, StyleSheet, Button } from "react-native";
 import React from "react";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -63,10 +63,11 @@ const Home =() => {
   };
 
   return (
-    <View>
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-			<Text>Welcome, {user?.emailAddresses[0].emailAddress} 🎉</Text>
-		</View>
+    <View style={styles.container}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', maxHeight: 20, }}>
+			    <Text>Welcome, {user?.emailAddresses[0].emailAddress} 🎉</Text>
+		  </View>
+      <Text style={styles.sectionTitle}>Plant Gallery</Text>
       <TextInput
         placeholder="add plant"
         style={styles.input}
@@ -103,6 +104,56 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 3,
   },
+  container: {
+    flex: 1,
+    backgroundColor: "#E8EAED",
+    },
+headerWrapper: { 
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingTop: 60,
+    alignItems: 'center',
+},
+sectionTitle: {
+    fontSize: 30,
+    fontWeight: "bold",
+
+},
+addWrapper: {
+    width: 90,
+    height: 50,
+    backgroundColor: 'white', // Ensure it's a contrasting color
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: '#C0C0C0',
+    borderWidth: 1,
+},
+galleryWrapper: { 
+    paddingTop: 15,
+    paddingHorizontal: 20,
+},
+
+photos: {
+    marginTop: 20,
+},
+
+addText: {
+    color: 'black', // Ensure text is visible
+    fontSize: 24,
+    fontWeight: 'bold',
+},
+noPlantsText: {
+  fontSize: 18,
+  fontWeight: 'bold',
+  color: '#777',
+  textAlign: 'center',
+  marginTop: 20,
+},
+plant: {
+
+},
 });
 
 export default Home;

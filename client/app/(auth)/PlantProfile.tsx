@@ -1,20 +1,32 @@
 import React from 'react'
-import { Button, Text, View, StyleSheet, TouchableOpacity } from 'react-native'
+import { Button, Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 
-const PlantProfile = () => {
+const PlantProfile = (prop: any) => {
   const navigation = useNavigation<any>();
+  
+  const openUpload = () => {
+    navigation.navigate("upload");
+  }
 
   return (
     <View style={styles.pcontainer}>
       <View style={styles.headerWrapper}>
         <Text style={styles.sectionTitle}>Plant Profile</Text> 
-        <TouchableOpacity onPress={() => navigation.navigate("upload")}>
+        <TouchableOpacity onPress={() => openUpload()}>
           <View style={styles.backWrapper}>
             <Text style={styles.backButton}>Back</Text>
           </View>
         </TouchableOpacity>
       </View>
+      <View style={styles.content}>
+            <View style={styles.imageWrapper}>
+                <Image style={styles.photoSize} source={require('./t1.png')} />
+            </View>
+            <Text style={styles.desc}>Description:</Text>
+            <Text style={styles.info}>{prop.text}</Text>
+            <Text>TBD...</Text>
+        </View>
     </View>
   );
 }
@@ -50,8 +62,36 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
   },
+  content: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 60,
+ },
+  imageWrapper: {
+    height: 256,
+    width: 256,
+    backgroundColor: 'lightgray',
+    borderRadius: 5,
+    borderColor: '#black',
+    borderWidth: 3,
+  },
+
+  desc: {
+    fontSize: 25,
+    fontWeight: 'bold',
+
+  },
+
+  info: {
+
+  },
+
+  photoSize: {
+    height: 250,
+    width: 250,
+  }
+
 });
 
 export default PlantProfile;
-
 

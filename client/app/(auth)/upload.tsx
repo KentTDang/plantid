@@ -4,12 +4,13 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigation } from '@react-navigation/native';
 import PlantCard from '../../components/PlantCard';
+import { ScrollView } from "react-native";
 
 export default function index() {
   const [title, setTitle] = useState<string>("");
   const [newTitle, setNewTitle] = useState<string>("");
   const navigation = useNavigation<any>();
-  const [plantList, setPlantList] = useState<string[]>([]);
+  const [plantList, setPlantList] = useState<string[]>(["Cactu"]);
   const [photo, setPhoto] = useState();
 
   const handlePhoto = () => {
@@ -85,19 +86,14 @@ export default function index() {
 
         {/* All plants in gallery */}
         <View style = {styles.galleryWrapper}>
-            
-            <View style={styles.photos}>
-                {/* This is where the photos will go */}
-
-                {/* want a place holder if no plants added "Add Plants" */}
-                {/* Make add button for plants */}
-            </View>
-
-            <PlantCard text={"Plant 1: Disease"}/>
-            <PlantCard />
-            <PlantCard />
-            <PlantCard />
-
+            {plantList.length === 0 ? (
+              <Text style={styles.noPlantsText}>Add Plants</Text> ) : (
+            <ScrollView> 
+              {plantList.map((plant, index) => (          
+                <PlantCard key={index} text={plant} plantNumber={index + 1}/>
+              ))}
+            </ScrollView>
+            )}
         </View>
         
 
@@ -146,7 +142,13 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
     },
-
+    noPlantsText: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      color: '#777',
+      textAlign: 'center',
+      marginTop: 20,
+    },
     input: {
         borderWidth: 3,
     },
