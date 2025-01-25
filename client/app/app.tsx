@@ -16,7 +16,7 @@ export default function App() {
 
   console.log(title);
 
-  const MONGODBURL = "http://localhost:3000/plants";
+  const MONGODBURL = "https://plantid-zry5.onrender.com/plants";
 
   const getPlants = async () => {
     try {

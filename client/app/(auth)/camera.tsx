@@ -13,6 +13,7 @@ import {
   View,
   Dimensions,
 } from "react-native";
+import axios from "axios";
 
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -26,6 +27,8 @@ export default function App() {
   const [flash, FlashMode] = useState<FlashMode>("off");
 
   const screenHeight = Dimensions.get("window").height;
+
+  const MONGODBURL = "https://plantid-zry5.onrender.com/plants";
 
   // If permissions are still loading
   if (!permission) {
@@ -55,8 +58,24 @@ export default function App() {
   const takePic = async () => {
     if (cameraRef.current) {
       try {
-        const data = await cameraRef.current.takePictureAsync();
-        console.log(data);
+        // Capture image and request base64 encoding
+        const data = await cameraRef.current.takePictureAsync({ base64: true });
+
+        if (data) {
+          // Prepare the image payload
+          const imagePayload = {
+            image: data.base64, // Base64 string
+            filename: data.uri.split("/").pop(), // Extract filename from URI
+          };
+
+          // Upload the image to the server
+          try {
+            await axios.post(MONGODBURL, imagePayload);
+            console.log("Image successfully uploaded!");
+          } catch (error) {
+            console.error("Failed to upload image:", error);
+          }
+        }
       } catch (error) {
         console.error("Error taking picture:", error);
       }

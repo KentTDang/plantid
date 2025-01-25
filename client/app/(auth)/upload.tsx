@@ -22,7 +22,7 @@ export default function index() {
 
   console.log(title);
 
-  const MONGODBURL = "http://172.20.10.3:3000/plants";
+  const MONGODBURL = "https://plantid-zry5.onrender.com/plants";
 
   const getPlants = async () => {
     try {
