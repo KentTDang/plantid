@@ -3,7 +3,13 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
 
-const PlantCard = (props: any) => {
+
+interface PlantCardProps {
+    text: string;
+    plantNumber: number;
+}
+
+const PlantCard = ({ text, plantNumber }: PlantCardProps) => {
     const navigation = useNavigation<any>();
 
     const openProfile = () => {
@@ -14,7 +20,9 @@ const PlantCard = (props: any) => {
     <TouchableOpacity style={styles.items} onPress={() => openProfile()}>
         <View style={styles.itemLeft}>
             <Icon name="leaf" size={30} color="#a7c957" />
-            <Text style={styles.itemsText}>{props.text}</Text>
+            <Text style={styles.itemsText}>
+                Plant {plantNumber}: {text}
+                </Text>
         </View>
     </TouchableOpacity>
   );
