@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Text, TextInput, Button, View } from "react-native";
+import { Text, TextInput, TouchableOpacity, View, StyleSheet } from "react-native";
 import { useSignUp } from "@clerk/clerk-expo";
 import { useRouter } from "expo-router";
 
@@ -16,22 +16,15 @@ export default function SignUpScreen() {
   const onSignUpPress = async () => {
     if (!isLoaded) return;
 
-    // Start sign-up process using email and password provided
     try {
       await signUp.create({
         emailAddress,
         password,
       });
 
-      // Send user an email with verification code
       await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
-
-      // Set 'pendingVerification' to true to display second form
-      // and capture OTP code
       setPendingVerification(true);
     } catch (err) {
-      // See https://clerk.com/docs/custom-flows/error-handling
-      // for more info on error handling
       console.error(JSON.stringify(err, null, 2));
     }
   };
@@ -41,61 +34,94 @@ export default function SignUpScreen() {
     if (!isLoaded) return;
 
     try {
-      // Use the code the user provided to attempt verification
       const signUpAttempt = await signUp.attemptEmailAddressVerification({
         code,
       });
 
-      // If verification was completed, set the session to active
-      // and redirect the user
       if (signUpAttempt.status === "complete") {
         await setActive({ session: signUpAttempt.createdSessionId });
         router.replace("/");
       } else {
-        // If the status is not complete, check why. User may need to
-        // complete further steps.
-        console.log("HIT HERE MY BROTHER");
+        console.log("Verification failed");
         console.error(JSON.stringify(signUpAttempt, null, 2));
       }
     } catch (err) {
-      // See https://clerk.com/docs/custom-flows/error-handling
-      // for more info on error handling
       console.error(JSON.stringify(err, null, 2));
     }
   };
 
   if (pendingVerification) {
     return (
-      <>
-        <Text>Verify your email</Text>
+      <View style={styles.container}>
+        <Text style={styles.headerText}>Verify your email</Text>
         <TextInput
+          style={styles.input}
           value={code}
           placeholder="Enter your verification code"
           onChangeText={(code) => setCode(code)}
         />
-        <Button title="Verify" onPress={onVerifyPress} />
-      </>
+        <TouchableOpacity style={styles.button} onPress={onVerifyPress}>
+          <Text style={styles.buttonText}>Verify</Text>
+        </TouchableOpacity>
+      </View>
     );
   }
 
   return (
-    <View>
-      <>
-        <Text>Sign up</Text>
-        <TextInput
-          autoCapitalize="none"
-          value={emailAddress}
-          placeholder="Enter email"
-          onChangeText={(email) => setEmailAddress(email)}
-        />
-        <TextInput
-          value={password}
-          placeholder="Enter password"
-          secureTextEntry={true}
-          onChangeText={(password) => setPassword(password)}
-        />
-        <Button title="Continue" onPress={onSignUpPress} />
-      </>
+    <View style={styles.container}>
+      <Text style={styles.headerText}>Sign up</Text>
+      <TextInput
+        style={styles.input}
+        autoCapitalize="none"
+        value={emailAddress}
+        placeholder="Enter email"
+        onChangeText={(email) => setEmailAddress(email)}
+      />
+      <TextInput
+        style={styles.input}
+        value={password}
+        placeholder="Enter password"
+        secureTextEntry={true}
+        onChangeText={(password) => setPassword(password)}
+      />
+      <TouchableOpacity style={styles.button} onPress={onSignUpPress}>
+        <Text style={styles.buttonText}>Continue</Text>
+      </TouchableOpacity>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    padding: 20,
+  },
+  headerText: {
+    fontSize: 28,
+    fontWeight: "bold",
+    marginBottom: 20,
+    textAlign: "center",
+    color: "#a7c957",
+  },
+  input: {
+    height: 40,
+    borderColor: "#a7c957",
+    borderWidth: 3,
+    marginBottom: 15,
+    paddingLeft: 10,
+    borderRadius: 5,
+  },
+  button: {
+    backgroundColor: "#a7c957", // Dark green background
+    padding: 12,
+    borderRadius: 5,
+    alignItems: "center",
+    marginTop: 10,
+  },
+  buttonText: {
+    color: "#fff", // White text color
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+});
