@@ -47,6 +47,7 @@ opt_einsum==3.4.0
 optree==0.14.0
 orjson==3.10.15
 packaging==24.2
+pillow==11.1.0
 protobuf==5.29.3
 pydantic==2.10.6
 pydantic_core==2.27.2
