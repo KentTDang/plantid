@@ -1,0 +1,8 @@
+# Ignore .Trash-0 directory
+.Trash-0/
+
+# Ignore all checkpoint directories
+**/.ipynb_checkpoints/
+
+# Ignore the .git directory itself
+/.git
