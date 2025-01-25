@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 
 export default function index() {
   const [title, setTitle] = useState<string>("");
+  const [newTitle, setNewTitle] = useState<string>("");
+
   const [plantList, setPlantList] = useState<string[]>([]);
 
   useEffect(() => {
@@ -15,10 +17,20 @@ export default function index() {
 
   const MONGODBURL = "http://localhost:3000/plants";
 
+  const getPlants = async () => {
+    try {
+      const result = await axios.get(MONGODBURL);
+      setPlantList(result.data);
+    } catch (error) {
+      console.error("Faily to get plant list: ", error);
+    }
+  };
+
   const handlePostPlant = async () => {
     console.log("Hit handle post");
     try {
       await axios.post(MONGODBURL, { title: title });
+      getPlants()
       setTitle("");
       console.log("Post Plant Sucessful");
     } catch (error) {
@@ -26,12 +38,24 @@ export default function index() {
     }
   };
 
-  const getPlants = async () => {
+  // Delete
+  const handleDeletePlant = async (plant: any) => {
     try {
-      const result = await axios.get(MONGODBURL);
-      setPlantList(result.data);
+      await axios.delete(`${MONGODBURL}/${plant._id}`);
+      getPlants();
     } catch (error) {
-      console.error("Faily to get plant list: ", error);
+      console.error("Failed to delete plant: ", error);
+    }
+  };
+
+  // Update
+  const handlePutPlant = async (plant: any) => {
+    try {
+      await axios.put(`${MONGODBURL}/${plant._id}`, {title: newTitle});
+      getPlants();
+      setNewTitle("");
+    } catch (error) {
+      console.error("Failed to update plant: ", error);
     }
   };
 
@@ -51,6 +75,17 @@ export default function index() {
           plantList.map((plant: any, index) => (
             <View key={index}>
               <Text>{plant.title}</Text>
+              <TextInput
+                placeholder="Edit plant"
+                style={styles.input}
+                onChangeText={(text) => setNewTitle(text)}
+                value={newTitle}
+              ></TextInput>
+              <Button title="Edit" onPress={() => handlePutPlant(plant)}></Button>
+              <Button
+                title="Delte"
+                onPress={() => handleDeletePlant(plant)}
+              ></Button>
             </View>
           ))}
       </View>
