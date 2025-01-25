@@ -6,3 +6,5 @@
 
 # Ignore the .git directory itself
 /.git
+
+.env
