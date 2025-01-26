@@ -99,8 +99,6 @@ app.delete('/plants/:id', async(req,res) => {
     }
 })
 
-app.use((req) => console.log(req));
-
 app.listen(port, () => {
     console.log("Server is running on", port);
 })
