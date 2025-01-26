@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ProfileSection from './ProfileSection';
 import axios from 'axios';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 interface PlantProfileProps {
   name: string;
@@ -69,13 +70,10 @@ const PlantProfile = ({name, image, health}: PlantProfileProps) => {
   return (
     <View style={styles.pcontainer}>
       <View style={styles.headerWrapper}>
-        <Text style={styles.sectionTitle}>Plant Profile</Text> 
         <TouchableOpacity onPress={() => openHome()}>
-          <View style={styles.backWrapper}>
-            {/* <Text style={styles.backButton}>Back</Text> */}
-            <Icon name="arrow-left" size={30} />
-          </View>
+            <MaterialIcons name="arrow-back-ios" size={24} color="black" />
         </TouchableOpacity>
+        <Text style={styles.sectionTitle}>Plant Profile</Text> 
       </View>
 
       
@@ -113,7 +111,6 @@ const styles = StyleSheet.create({
   },
   headerWrapper: { 
     flexDirection: 'row',
-    justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingTop: 60,
     paddingBottom: 15,
@@ -122,6 +119,9 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 30,
     fontWeight: "bold",
+    justifyContent: 'center',
+    alignItems: "center",
+    paddingLeft: 63
   },
   backWrapper: {
     width: 90,
