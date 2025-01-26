@@ -96,7 +96,12 @@ export default function App() {
         <View style={styles.buttonContainer}>
           <View style={styles.topButtons}>
             <TouchableOpacity style={styles.flashButton} onPress={toggleFlash}>
-              <FontAwesome name="flash" size={25} color="white" />
+               <FontAwesome 
+                name="flash" 
+                size={25} 
+                color={flash === "off"? "black" : "white"} 
+                />
+               
             </TouchableOpacity>
 
             <TouchableOpacity
