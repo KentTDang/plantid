@@ -30,7 +30,7 @@ export default function App() {
 
   const screenHeight = Dimensions.get("window").height;
 
-  const MONGODBURL = "https://plantid-zry5.onrender.com/plants";
+  const MONGODBURL = "https://plantid.zeabur.app/plants";
 
   // If permissions are still loading
   if (!permission) {

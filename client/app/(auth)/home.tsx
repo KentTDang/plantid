@@ -1,20 +1,19 @@
-import { TouchableOpacity, View, Text, StyleSheet} from "react-native";
+import { TouchableOpacity, View, Text, StyleSheet, TextInput, Button } from "react-native";
 import React from "react";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useUser } from '@clerk/clerk-expo';
-import { useNavigation } from '@react-navigation/native';
-import PlantCard from '../../components/PlantCard'
+import { useUser } from "@clerk/clerk-expo";
+import { useNavigation } from "@react-navigation/native";
+import PlantCard from "../../components/PlantCard";
 import { ScrollView } from "react-native";
-import Icon from 'react-native-vector-icons/FontAwesome';
-
+import Icon from "react-native-vector-icons/FontAwesome";
 
 const Home = () => {
   const navigation = useNavigation<any>();
   const [title, setTitle] = useState<string>("");
   const [newTitle, setNewTitle] = useState<string>("");
   const { user } = useUser();
-  const [plantList, setPlantList] = useState<{ id: string; title: string }[]>([{ id: "1", title: "Temporary Plant 1" }, { id: "2", title: "Temporary Plant 2" }, { id: "3", title: "Temporary Plant 3" }]);
+  const [plantList, setPlantList] = useState<string[]>([]);
 
   useEffect(() => {
     getPlants();
@@ -22,7 +21,7 @@ const Home = () => {
 
   console.log(title);
 
-  const MONGODBURL = "https://plantid-zry5.onrender.com/plants";
+  const MONGODBURL = "https://plantid.zeabur.app/plants";
 
   const getPlants = async () => {
     try {
@@ -37,8 +36,8 @@ const Home = () => {
   const handlePostPlant = async () => {
     console.log("Hit handle post");
     try {
-      await axios.post(MONGODBURL, { title });
-      getPlants()
+      await axios.post(MONGODBURL, { title }, { headers: { "Content-Type": "application/json" } });
+      getPlants();
       setTitle("");
       console.log("Post Plant Sucessful");
     } catch (error) {
@@ -59,7 +58,7 @@ const Home = () => {
   
 
   // Update
-  const handlePutPlant = async ( id: string ) => {
+  const handlePutPlant = async (id: string) => {
     try {
       // await axios.put(`${MONGODBURL}/${plant._id}`, {title: newTitle});
       getPlants();
@@ -74,90 +73,91 @@ const Home = () => {
   };
 
   return (
-    <View style = {styles.container}>
-        <View style={styles.headerWrapper}>
-            <Text style={styles.sectionTitle}>Plant Gallery</Text> 
-            <TouchableOpacity onPress={() => openCamera()}>
-                <View style={styles.addWrapper}>
-                  <Icon name="camera" size={30}/>
-                </View>
-            </TouchableOpacity>
-        </View>
-        {/* All plants in gallery */}
-        <View style = {styles.galleryWrapper}>
-            {plantList.length === 0 ? (
-              <Text style={styles.noPlantsText}>Add Plants</Text> ) : (
-            <ScrollView> 
-              {plantList && plantList.map((plant, index) => (          
-                <PlantCard 
-                  key={plant.id} 
-                  text={plant.title} 
-                  plantId={plant.id}
-                  onDelete={handleDeletePlant}
-                />
-              ))}
-            </ScrollView>
-            )}
-        </View>
+    <View style={styles.container}>
+      <View style={styles.headerWrapper}>
+        <Text style={styles.sectionTitle}>Plant Gallery</Text>
+        <TouchableOpacity onPress={() => openCamera()}>
+          <View style={styles.addWrapper}>
+            <Icon name="camera" size={30} />
+          </View>
+        </TouchableOpacity>
+      </View>
+      {/* All plants in gallery */}
+      <View>
+      <TextInput
+        placeholder="add plant"
+        style={styles.input}
+        onChangeText={(text) => setTitle(text)}
+        value={title}
+      ></TextInput>
+      <Button onPress={handlePostPlant} title="ADD PLANT" />
+      <Text>index</Text>
+
+      <View>
+        {plantList &&
+          plantList.map((plant: any, index) => (
+            <View key={index}>
+              <Text>{plant.title}</Text>
+            </View>
+          ))}
+      </View>
+    </View>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "#E8EAED",
-        },
-    headerWrapper: { 
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingHorizontal: 20,
-        paddingTop: 60,
-        paddingBottom: 15,
-        alignItems: 'center',
-    },
-    sectionTitle: {
-        fontSize: 30,
-        fontWeight: "bold",
-    },
-    addWrapper: {
-        width: 90,
-        height: 50,
-        backgroundColor: 'white', // Ensure it's a contrasting color
-        borderRadius: 20,
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderColor: 'black',
-        borderWidth: 1,
-    },
-    galleryWrapper: { 
-        paddingTop: 15,
-        paddingHorizontal: 20,
-    },
+  container: {
+    flex: 1,
+    backgroundColor: "#E8EAED",
+  },
+  headerWrapper: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: 20,
+    paddingTop: 60,
+    paddingBottom: 15,
+    alignItems: "center",
+  },
+  sectionTitle: {
+    fontSize: 30,
+    fontWeight: "bold",
+  },
+  addWrapper: {
+    width: 90,
+    height: 50,
+    backgroundColor: "white", // Ensure it's a contrasting color
+    borderRadius: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    borderColor: "black",
+    borderWidth: 1,
+  },
+  galleryWrapper: {
+    paddingTop: 15,
+    paddingHorizontal: 20,
+  },
 
-    photos: {
-        marginTop: 20,
-    },
+  photos: {
+    marginTop: 20,
+  },
 
-    addText: {
-        color: 'black', // Ensure text is visible
-        fontSize: 24,
-        fontWeight: 'bold',
-    },
-    noPlantsText: {
-      fontSize: 18,
-      fontWeight: 'bold',
-      color: '#777',
-      textAlign: 'center',
-      marginTop: 20,
-    },
-    input: {
-        borderWidth: 3,
-    },
-    plant: {
-
-    },
+  addText: {
+    color: "black", // Ensure text is visible
+    fontSize: 24,
+    fontWeight: "bold",
+  },
+  noPlantsText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#777",
+    textAlign: "center",
+    marginTop: 20,
+  },
+  input: {
+    borderWidth: 3,
+  },
+  plant: {},
 });
-
 
 export default Home;
