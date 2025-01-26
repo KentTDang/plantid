@@ -106,10 +106,18 @@ export default function App() {
               <MaterialIcons name="flip-camera-ios" size={25} color="white" />
             </TouchableOpacity>
           </View>
-          <View style={styles.middleOpen}></View>
+
+          <View style={styles.middleOpen}>
+            <View style={styles.cornerBoxContainer}>
+              <View style={[styles.corner, styles.topLeft]} />
+              <View style={[styles.corner, styles.topRight]} />
+              <View style={[styles.corner, styles.bottomLeft]} />
+              <View style={[styles.corner, styles.bottomRight]} />
+            </View>
+          </View>
 
           <View style={styles.bottomButtons}>
-            <TouchableOpacity style={styles.takePicButton} onPress={takePic}>
+            <TouchableOpacity onPress={takePic}>
               <Ionicons name="radio-button-on" size={75} color="white" />
             </TouchableOpacity>
           </View>
@@ -137,44 +145,75 @@ const styles = StyleSheet.create({
   },
   topButtons: {
     flex: 2.5,
-    flexDirection: "row", // Align children horizontally
-    justifyContent: "space-between", // Place items at the opposite sides
-    backgroundColor: "transparent",
-    alignItems: "center", // Center items vertically if needed
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     padding: 10,
   },
   middleOpen: {
     flex: 8,
     backgroundColor: "transparent",
+    justifyContent: "center",
+    alignItems: "center",
   },
   bottomButtons: {
     flex: 3,
-    backgroundColor: "transparent",
     alignItems: "center",
   },
   cameraFlipButton: {
     padding: 7,
-    backgroundColor: "rgba(0, 0, 0, 0.25)", // Gray transparent background
-    width: 50, // Circle width
-    height: 50, // Circle height
-    borderRadius: 25, // Half of width/height to make it circular
-    justifyContent: "center", // Center the icon
-    alignItems: "center", // Center the icon
+    backgroundColor: "rgba(0, 0, 0, 0.25)",
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    justifyContent: "center",
+    alignItems: "center",
   },
   flashButton: {
     padding: 10,
-    backgroundColor: "rgba(0, 0, 0, 0.25)", // Gray transparent background
-    width: 50, // Circle width
-    height: 50, // Circle height
-    borderRadius: 25, // Half of width/height to make it circular
-    justifyContent: "center", // Center the icon
-    alignItems: "center", // Center the icon
+    backgroundColor: "rgba(0, 0, 0, 0.25)",
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    justifyContent: "center",
+    alignItems: "center",
   },
-  takePicButton: {},
-
-  text: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "white",
+  cornerBoxContainer: {
+    width: 320,
+    height: 320,
+    position: "relative",
+  },
+  corner: {
+    width: 30,
+    height: 30,
+    position: "absolute",
+    backgroundColor: "transparent",
+    borderColor: "gray",
+    
+  },
+  topLeft: {
+    top: 0,
+    left: 0,
+    borderTopWidth: 4,
+    borderLeftWidth: 4,
+  },
+  topRight: {
+    top: 0,
+    right: 0,
+    borderTopWidth: 4,
+    borderRightWidth: 4,
+  },
+  bottomLeft: {
+    bottom: 0,
+    left: 0,
+    borderBottomWidth: 4,
+    borderLeftWidth: 4,
+  },
+  bottomRight: {
+    bottom: 0,
+    right: 0,
+    borderBottomWidth: 4,
+    borderRightWidth: 4,
   },
 });
+
