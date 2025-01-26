@@ -41,20 +41,20 @@ const Plant = mongoose.model("Plant", plantScheme)
 const PlantImage = mongoose.model("PlantImages", plantImageScheme)
 
 // Create a plant
-// app.post('/plants', async(req,res) => {
-//     console.log("Hit index post server")
-//     console.log(req)
-//     console.log(res)
-//     try {
-//         const newPlant = new Plant(req.body);
-//         await newPlant.save();
-//         res.status(201).json(newPlant);
-//      } catch (error) {
-//         res.status(400).json({message:error.message})
-//      }
-// })
+app.post('/plants', async(req,res) => {
+    console.log("Hit index post server")
+    console.log(req)
+    console.log(res)
+    try {
+        const newPlant = new Plant(req.body);
+        await newPlant.save();
+        res.status(201).json(newPlant);
+     } catch (error) {
+        res.status(400).json({message:error.message})
+     }
+})
 
-app.post('/plants', async (req, res) => {
+app.post('/plantsImage', async (req, res) => {
     console.log(req.body)
     try {
       const newPlantImage = new PlantImage({
