@@ -5,12 +5,12 @@ const cors = require('cors');
 const fileUpload = require('express-fileupload');
 
 const app = express();
-const port = 3000;
+const port = 8080;
 
 // mmiddleware
 app.use(bodyParser.json({limit: '420mb'}));
 app.use(bodyParser.urlencoded({limit: '420mb', extended: true}));
-app.use(cors());
+app.use(cors({ origin: '*' })); // For testing only; restrict origins in production
 app.use(fileUpload({
     limits: { fileSize: 50 * 1024 * 1024 },
   }));
@@ -20,12 +20,15 @@ const username = encodeURIComponent("ktd6900");
 const password = encodeURIComponent("uCLvye364apCXXgt");
 const MONGOURL = `mongodb+srv://${username}:${password}@plantid.ca6q0.mongodb.net/plantlist?retryWrites=true&w=majority&appName=Plantid`;
 
-try {
-    mongoose.connect(MONGOURL);
-    console.log("Connected to mongoDB");
-} catch(error) {
-    console.error(error)
-}
+(async () => {
+  try {
+    await mongoose.connect(MONGOURL, { useNewUrlParser: true, useUnifiedTopology: true });
+    console.log("Connected to MongoDB");
+  } catch (error) {
+    console.error("Error connecting to MongoDB:", error.message);
+  }
+})();
+
 
 const plantScheme = new mongoose.Schema({
     title: String,
@@ -99,5 +102,5 @@ app.delete('/plants/:id', async(req,res) => {
     }
 })
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
