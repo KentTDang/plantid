@@ -83,12 +83,44 @@ const PlantProfile = ({name, image, health}: PlantProfileProps) => {
         {profiles.map((profile, index) => (
           <ProfileSection
             key={index}
-            name={profile.name}
-            image={profile.image}
-            health={profile.health}
+            name={"Apple Leaf 1"}
+            image={require('./i1.png')}
+            health={"Apple Scab Advanced"}
           />
         ))}
-
+        {profiles.map((profile, index) => (
+          <ProfileSection
+            key={index}
+            name={"Appicot Leaf 1"}
+            image={require('./i2.png')}
+            health={"Healthy"}
+          />
+        ))}
+        {profiles.map((profile, index) => (
+          <ProfileSection
+            key={index}
+            name={"Apple Leaf 2"}
+            image={require('./i3.png')}
+            health={"Black Scab"}
+          />
+        ))}
+        {profiles.map((profile, index) => (
+          <ProfileSection
+            key={index}
+            name={"Apple Leaf 3"}
+            image={require('./i4.png')}
+            health={"Healthy"}
+          />
+        ))}
+        {profiles.map((profile, index) => (
+          <ProfileSection
+            key={index}
+            name={"Appricot Leaf 2"}
+            image={require('./i5.png')}
+            health={"Healthy"}
+          />
+        ))}
+      
 {/* on press this needs to link to camera and re input the new photo before adding to the profile (same name different health value from database) */}
       <View style={styles.buttonWrapper}>
         <TouchableOpacity onPress= {updateProfile} style={styles.addWrap}>
