@@ -7,11 +7,12 @@ import { useNavigation } from '@react-navigation/native';
 interface PlantCardProps {
     text: string;
     plantId: string;
+    disease:string;
     onDelete: (id: string) => void;
 
 }
 
-const PlantCard = ({ text, plantId, onDelete }: PlantCardProps) => {
+const PlantCard = ({ text, plantId, disease, onDelete }: PlantCardProps) => {
     const navigation = useNavigation<any>();
 
     const openProfile = () => {
@@ -30,6 +31,7 @@ const PlantCard = ({ text, plantId, onDelete }: PlantCardProps) => {
             <Icon name="leaf" size={30} color="#a7c957" />
             <Text style={styles.itemsText}>
                 {text}
+                {disease}
             </Text>
         </View>
         <View style={styles.checkWrapper}>

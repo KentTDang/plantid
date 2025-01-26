@@ -10,10 +10,11 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 interface PlantProfileProps {
   name: string;
   image: any;
+  disease: string,
   health: string;
 }
 
-const PlantProfile = ({name, image, health}: PlantProfileProps) => {
+const PlantProfile = ({name, image, disease, health}: PlantProfileProps) => {
   const navigation = useNavigation<any>();
 
 
@@ -82,6 +83,7 @@ const PlantProfile = ({name, image, health}: PlantProfileProps) => {
           <ProfileSection
             key={index}
             name={profile.name}
+            disease={profile.disease}
             image={profile.image}
             health={profile.health}
           />
