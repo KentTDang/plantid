@@ -16,8 +16,8 @@ const profileSection = ({name, image, health}: PlantProfileProps) => {
             </View>
             <View style={styles.plantInfo}>
                 <View>
-                    <Text style={styles.plantData}>Name: {name}</Text>
-                    <Text style={styles.plantData}>Health: {health}</Text>
+                    <Text style={styles.plantData}>Species: {name}</Text>
+                    <Text style={styles.plantData}>Disease: {health}</Text>
                 </View>
             </View>
         </View>

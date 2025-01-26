@@ -18,13 +18,15 @@ import axios from "axios";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 export default function App() {
   const [facing, setFacing] = useState<CameraType>("back");
   const [permission, requestPermission] = useCameraPermissions(); // Always call this hook unconditionally
   const cameraRef = useRef<CameraView | null>(null); // Always define hooks unconditionally
-
   const [flash, FlashMode] = useState<FlashMode>("off");
+  const navigation = useNavigation<any>();
+  const route = useRoute<any>();
 
   const screenHeight = Dimensions.get("window").height;
 
@@ -63,18 +65,38 @@ export default function App() {
 
         if (data) {
           // Prepare the image payload
-          const imagePayload = {
-            image: data.base64, // Base64 string
-            filename: data.uri.split("/").pop(), // Extract filename from URI
+          // const imagePayload = {
+          //   image: data.base64, // Base64 string
+          //   filename: data.uri.split("/").pop(), // Extract filename from URI
+          // };
+          
+          const tempProfile = {
+            name: "Co",
+            image: "",
+            health: "Sick",
           };
 
-          // Upload the image to the server
-          try {
-            await axios.post(MONGODBURL, imagePayload);
-            console.log("Image successfully uploaded!");
-          } catch (error) {
-            console.error("Failed to upload image:", error);
+          const onCapture = route.params?.onCapture
+          if (onCapture) {
+            onCapture(tempProfile.image, tempProfile.health);
           }
+
+
+
+          // image goes into MODEL
+          // GOES TO DB
+          navigation.navigate("PlantData");
+          // Pull DB in PlantData
+          // from plant Profile make Gallery cards using Species
+
+
+          // Upload the image to the server
+          // try {
+          //   await axios.post(MONGODBURL, imagePayload);
+          //   console.log("Image successfully uploaded!");
+          // } catch (error) {
+          //   console.error("Failed to upload image:", error);
+          // }
         }
       } catch (error) {
         console.error("Error taking picture:", error);
@@ -96,7 +118,11 @@ export default function App() {
         <View style={styles.buttonContainer}>
           <View style={styles.topButtons}>
             <TouchableOpacity style={styles.flashButton} onPress={toggleFlash}>
-              <FontAwesome name="flash" size={25} color="white" />
+              <FontAwesome
+                name="flash"
+                size={25}
+                color={flash === "off" ? "black" : "white"}
+              />
             </TouchableOpacity>
 
             <TouchableOpacity

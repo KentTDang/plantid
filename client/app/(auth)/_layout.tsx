@@ -73,7 +73,7 @@ const TabsPage = () => {
 					headerShown: false,
 					headerTitle: 'Plant Profile',
 					tabBarIcon: ({ color, size }) => (
-						<Ionicons name="home-outline" size={size} color={color} />
+						<Ionicons name="person-outline" size={size} color={color} />
 					),
 					tabBarLabel: 'Profile'
 				}}

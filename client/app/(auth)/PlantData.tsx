@@ -1,9 +1,10 @@
 import React from 'react';
-import { useState } from 'react';
-import { Button, Text, View, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native'
+import { useState, useEffect } from 'react';
+import { Text, View, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ProfileSection from './ProfileSection';
+import axios from 'axios';
 
 interface PlantProfileProps {
   name: string;
@@ -13,7 +14,33 @@ interface PlantProfileProps {
 
 const PlantProfile = ({name, image, health}: PlantProfileProps) => {
   const navigation = useNavigation<any>();
-  
+
+
+  const [dataSet, setDataSet] = useState <string[]>([])
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await axios.get('https://plantid.zeabur.app/plants')
+        setDataSet(response.data)
+      } catch(error) {
+        console.log("Failed to get data.", error)
+      }
+      
+    })();
+  }, []);
+
+  // const MONGODBURL = "https://plantid-zry5.onrender.com/plants";
+
+  // const getPlants = async () => {
+  //   try {
+  //     const result = await axios.get(MONGODBURL);
+  //     setPlantList(result.data);
+  //   } catch (error) {
+  //     console.error("Failed to get plant list: ", error);
+  //   }
+  // };
+
+
   const openHome = () => {
     navigation.navigate("home");
   }
@@ -26,13 +53,17 @@ const PlantProfile = ({name, image, health}: PlantProfileProps) => {
     { name, image, health },
   ]);
 
-  const addProfile = () => {
-    const newProfile = {
-      name: `New Plant ${profiles.length + 1}`,
-      image,
-      health: 'Unknown',
-    };
-    setProfiles([...profiles, newProfile]);
+  const updateProfile = () => { // plus goes here
+    navigation.navigate("camera", { 
+      onCapture: (newImage: any, newHealth: string) => {
+        const updatedProfile = {
+          name: "updated", // same as prev in page
+          image: newImage,
+          health: newHealth || "Sick",
+        };
+        setProfiles([...profiles, updatedProfile]);
+      },
+    });
   };
 
   return (
@@ -60,14 +91,14 @@ const PlantProfile = ({name, image, health}: PlantProfileProps) => {
 
 {/* on press this needs to link to camera and re input the new photo before adding to the profile (same name different health value from database) */}
       <View style={styles.buttonWrapper}>
-        <TouchableOpacity onPress={() => addProfile()} style={styles.addWrap}>
-            <Text style={styles.addPrompt}>+</Text>
+        <TouchableOpacity onPress= {updateProfile} style={styles.addWrap}>
+          <Text style={styles.addPrompt}>+</Text>
         </TouchableOpacity>
       </View>
       </ScrollView>
     </View>
   );
-}
+};
 
 PlantProfile.defaultProps = {
   name: 'Unknown Plant',

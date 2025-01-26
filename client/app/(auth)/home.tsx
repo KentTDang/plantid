@@ -14,7 +14,7 @@ const Home = () => {
   const [title, setTitle] = useState<string>("");
   const [newTitle, setNewTitle] = useState<string>("");
   const { user } = useUser();
-  const [plantList, setPlantList] = useState<{ id: string; title: string }[]>([{ id: "1", title: "Temporary Plant" },]);
+  const [plantList, setPlantList] = useState<{ id: string; title: string }[]>([{ id: "1", title: "Temporary Plant 1" }, { id: "2", title: "Temporary Plant 2" }, { id: "3", title: "Temporary Plant 3" }]);
 
   useEffect(() => {
     getPlants();
@@ -47,14 +47,16 @@ const Home = () => {
   };
 
   // Delete
-  const handleDeletePlant = async ( id: string ) => {
+  const handleDeletePlant = async (id: string) => {
     try {
-      await axios.delete(`${MONGODBURL}/${id}`);
-      getPlants();
+      // await axios.delete(`${MONGODBURL}/${id}`);
+      // Remove the deleted plant from the state
+      setPlantList(prevPlants => prevPlants.filter(plant => plant.id !== id));
     } catch (error) {
       console.error("Failed to delete plant: ", error);
     }
   };
+  
 
   // Update
   const handlePutPlant = async ( id: string ) => {
@@ -90,9 +92,9 @@ const Home = () => {
                 <PlantCard 
                   key={plant.id} 
                   text={plant.title} 
-                  plantNumber={index + 1}
-                  onDelete={() => handleDeletePlant(plant.id)}
-                  />
+                  plantId={plant.id}
+                  onDelete={handleDeletePlant}
+                />
               ))}
             </ScrollView>
             )}

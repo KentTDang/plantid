@@ -6,15 +6,13 @@ import { useNavigation } from '@react-navigation/native';
 
 interface PlantCardProps {
     text: string;
-    plantNumber: number;
-    onDelete: (plantNumber: number) => void;
+    plantId: string;
+    onDelete: (id: string) => void;
 
 }
 
-
-const PlantCard = ({ text, plantNumber, onDelete }: PlantCardProps) => {
+const PlantCard = ({ text, plantId, onDelete }: PlantCardProps) => {
     const navigation = useNavigation<any>();
-
 
     const openProfile = () => {
         // on open load info from DataBase
@@ -22,18 +20,17 @@ const PlantCard = ({ text, plantNumber, onDelete }: PlantCardProps) => {
     }
 
     const handlePress = () => {
-        onDelete(plantNumber);
+        onDelete(plantId);
     }
 
   return (
-
     // on click should load Plant data from DataBase (using name) into Profile section and open
-    <TouchableOpacity style={styles.items} onPress={() => openProfile()}>
+    <TouchableOpacity style={styles.items} onPress={openProfile}>
         <View style={styles.itemLeft}>
             <Icon name="leaf" size={30} color="#a7c957" />
             <Text style={styles.itemsText}>
-                Plant {plantNumber}: {text}
-                </Text>
+                {text}
+            </Text>
         </View>
         <View style={styles.checkWrapper}>
             <TouchableOpacity onPress={handlePress}>
