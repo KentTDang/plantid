@@ -4,30 +4,41 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
 
 
-
-
 interface PlantCardProps {
     text: string;
     plantNumber: number;
+    onDelete: (plantNumber: number) => void;
+
 }
 
 
-const PlantCard = ({ text, plantNumber }: PlantCardProps) => {
+const PlantCard = ({ text, plantNumber, onDelete }: PlantCardProps) => {
     const navigation = useNavigation<any>();
 
 
     const openProfile = () => {
-        navigation.navigate("PlantProfile");
+        // on open load info from DataBase
+        navigation.navigate("PlantData");
     }
 
+    const handlePress = () => {
+        onDelete(plantNumber);
+    }
 
   return (
+
+    // on click should load Plant data from DataBase (using name) into Profile section and open
     <TouchableOpacity style={styles.items} onPress={() => openProfile()}>
         <View style={styles.itemLeft}>
             <Icon name="leaf" size={30} color="#a7c957" />
             <Text style={styles.itemsText}>
                 Plant {plantNumber}: {text}
                 </Text>
+        </View>
+        <View style={styles.checkWrapper}>
+            <TouchableOpacity onPress={handlePress}>
+                <Icon name="check" size={30} color="#a7c957"/>
+            </TouchableOpacity>
         </View>
     </TouchableOpacity>
   );
@@ -56,6 +67,14 @@ const styles = StyleSheet.create({
         fontSize: 20,
         marginLeft: 30,
     },
+    checkWrapper: {
+        height: 50,
+        width: 50,
+        backgroundColor: 'white',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 4,
+    }
 });
 
 export default PlantCard;
