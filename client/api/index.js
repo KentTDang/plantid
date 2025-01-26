@@ -7,10 +7,12 @@ const app = express();
 const port = 3000;
 
 // mmiddleware
-var bodyParser = require('body-parser');
 app.use(bodyParser.json({limit: '420mb'}));
 app.use(bodyParser.urlencoded({limit: '420mb', extended: true}));
 app.use(cors());
+app.use(fileUpload({
+    limits: { fileSize: 50 * 1024 * 1024 },
+  }));
 
 // mongoDB connection
 const username = encodeURIComponent("ktd6900");
