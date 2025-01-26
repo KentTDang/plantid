@@ -41,7 +41,11 @@ const plantImageScheme = new mongoose.Schema({
   
 
 const Plant = mongoose.model("Plant", plantScheme)
-const PlantImage = mongoose.model("PlantImages", plantImageScheme)
+const plantImageSchema = new mongoose.Schema({
+  image: String,  // This will be the Firebase download URL
+  filename: String,
+});
+const PlantImage = mongoose.model("PlantImage", plantImageSchema);
 
 // Create a plant
 app.post('/plants', async(req,res) => {
@@ -58,18 +62,20 @@ app.post('/plants', async(req,res) => {
 })
 
 app.post('/plantsImage', async (req, res) => {
-    console.log(req.body)
-    try {
-      const newPlantImage = new PlantImage({
-        image: req.body.image, // Base64 image data
-        filename: req.body.filename, // Filename
-      });
-      await newPlantImage.save();
-      res.status(201).json(newPlantImage);
-    } catch (error) {
-      res.status(400).json({ message: error.message });
-    }
-  });
+  console.log("Plants Image");
+  try {
+    // Here we expect 'image' to be the Firebase URL
+    // not base64 data.
+    const newPlantImage = new PlantImage({
+      image: req.body.image,    // A public URL from Firebase
+      filename: req.body.filename,
+    });
+    await newPlantImage.save();
+    res.status(201).json(newPlantImage);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
   
 
 // Read a plant
