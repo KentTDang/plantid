@@ -2,13 +2,18 @@ const express = require('express');
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const cors = require('cors');
+const fileUpload = require('express-fileupload');
 
 const app = express();
 const port = 3000;
 
 // mmiddleware
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '420mb'}));
+app.use(bodyParser.urlencoded({limit: '420mb', extended: true}));
 app.use(cors());
+app.use(fileUpload({
+    limits: { fileSize: 50 * 1024 * 1024 },
+  }));
 
 // mongoDB connection
 const username = encodeURIComponent("ktd6900");
@@ -26,21 +31,43 @@ const plantScheme = new mongoose.Schema({
     title: String,
 })
 
+const plantImageScheme = new mongoose.Schema({
+    image: String, // Change from Number to String to store base64
+    filename: String, // File name of the image
+  });
+  
+
 const Plant = mongoose.model("Plant", plantScheme)
+const PlantImage = mongoose.model("PlantImages", plantImageScheme)
 
 // Create a plant
-app.post('/plants', async(req,res) => {
-    console.log("Hit index post server")
-    console.log(req)
-    console.log(res)
+// app.post('/plants', async(req,res) => {
+//     console.log("Hit index post server")
+//     console.log(req)
+//     console.log(res)
+//     try {
+//         const newPlant = new Plant(req.body);
+//         await newPlant.save();
+//         res.status(201).json(newPlant);
+//      } catch (error) {
+//         res.status(400).json({message:error.message})
+//      }
+// })
+
+app.post('/plants', async (req, res) => {
+    console.log(req.body)
     try {
-        const newPlant = new Plant(req.body);
-        await newPlant.save();
-        res.status(201).json(newPlant);
-     } catch (error) {
-        res.status(400).json({message:error.message})
-     }
-})
+      const newPlantImage = new PlantImage({
+        image: req.body.image, // Base64 image data
+        filename: req.body.filename, // Filename
+      });
+      await newPlantImage.save();
+      res.status(201).json(newPlantImage);
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+  
 
 // Read a plant
 app.get('/plants', async(req,res) => {
@@ -72,6 +99,7 @@ app.delete('/plants/:id', async(req,res) => {
     }
 })
 
+app.use((req) => console.log(req));
 
 app.listen(port, () => {
     console.log("Server is running on", port);

@@ -1,20 +1,21 @@
-import { TouchableOpacity, View, Text, StyleSheet} from "react-native";
+import { View, Text, TextInput, StyleSheet, Button, TouchableOpacity, Image} from "react-native";
 import React from "react";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useUser } from '@clerk/clerk-expo';
 import { useNavigation } from '@react-navigation/native';
-import PlantCard from '../../components/PlantCard'
+import PlantCard from '../../components/PlantCard';
 import { ScrollView } from "react-native";
-import Icon from 'react-native-vector-icons/FontAwesome';
 
-
-const Home = () => {
-  const navigation = useNavigation<any>();
+export default function index() {
   const [title, setTitle] = useState<string>("");
   const [newTitle, setNewTitle] = useState<string>("");
-  const { user } = useUser();
-  const [plantList, setPlantList] = useState<{ id: string; title: string }[]>([{ id: "1", title: "Temporary Plant" },]);
+  const navigation = useNavigation<any>();
+  const [plantList, setPlantList] = useState<string[]>(["Cactu"]);
+  const [photo, setPhoto] = useState();
+
+  const handlePhoto = () => {
+    console.log(photo);
+  };
 
   useEffect(() => {
     getPlants();
@@ -29,15 +30,15 @@ const Home = () => {
       const result = await axios.get(MONGODBURL);
       setPlantList(result.data);
     } catch (error) {
-      console.error("Failed to get plant list: ", error);
+      console.error("Faily to get plant list: ", error);
     }
   };
 
-  // Create Plant
+//   Update to breakout to camera page
   const handlePostPlant = async () => {
     console.log("Hit handle post");
     try {
-      await axios.post(MONGODBURL, { title });
+      await axios.post(MONGODBURL, { title: title });
       getPlants()
       setTitle("");
       console.log("Post Plant Sucessful");
@@ -47,9 +48,9 @@ const Home = () => {
   };
 
   // Delete
-  const handleDeletePlant = async ( id: string ) => {
+  const handleDeletePlant = async (plant: any) => {
     try {
-      await axios.delete(`${MONGODBURL}/${id}`);
+      await axios.delete(`${MONGODBURL}/${plant._id}`);
       getPlants();
     } catch (error) {
       console.error("Failed to delete plant: ", error);
@@ -57,15 +58,16 @@ const Home = () => {
   };
 
   // Update
-  const handlePutPlant = async ( id: string ) => {
+  const handlePutPlant = async (plant: any) => {
     try {
-      // await axios.put(`${MONGODBURL}/${plant._id}`, {title: newTitle});
+      await axios.put(`${MONGODBURL}/${plant._id}`, {title: newTitle});
       getPlants();
       setNewTitle("");
     } catch (error) {
       console.error("Failed to update plant: ", error);
     }
   };
+
 
   const openCamera = () => {
     navigation.navigate("camera");
@@ -77,26 +79,24 @@ const Home = () => {
             <Text style={styles.sectionTitle}>Plant Gallery</Text> 
             <TouchableOpacity onPress={() => openCamera()}>
                 <View style={styles.addWrapper}>
-                  <Icon name="camera" size={30}/>
+                    <Text style={styles.addText}>+</Text>
                 </View>
             </TouchableOpacity>
         </View>
+
         {/* All plants in gallery */}
         <View style = {styles.galleryWrapper}>
             {plantList.length === 0 ? (
               <Text style={styles.noPlantsText}>Add Plants</Text> ) : (
             <ScrollView> 
-              {plantList && plantList.map((plant, index) => (          
-                <PlantCard 
-                  key={plant.id} 
-                  text={plant.title} 
-                  plantNumber={index + 1}
-                  onDelete={() => handleDeletePlant(plant.id)}
-                  />
+              {plantList.map((plant, index) => (          
+                <PlantCard key={index} text={plant} plantNumber={index + 1}/>
               ))}
             </ScrollView>
             )}
         </View>
+        
+
     </View>
   );
 }
@@ -111,12 +111,12 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingHorizontal: 20,
         paddingTop: 60,
-        paddingBottom: 15,
         alignItems: 'center',
     },
     sectionTitle: {
         fontSize: 30,
         fontWeight: "bold",
+
     },
     addWrapper: {
         width: 90,
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         alignItems: 'center',
         justifyContent: 'center',
-        borderColor: 'black',
+        borderColor: '#C0C0C0',
         borderWidth: 1,
     },
     galleryWrapper: { 
@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
     plant: {
 
     },
+  
 });
 
 
-export default Home;
