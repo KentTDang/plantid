@@ -82,7 +82,7 @@ const Home = () => {
   return (
     <View style={styles.container}>
       <View style={styles.headerWrapper}>
-        <TouchableOpacity style={styles.extra}
+        <TouchableOpacity
           onPress={() => signOut({ redirectUrl: "/" })}
         >
           <Entypo style={styles.flipped} name="login" size={40} color="black" />
