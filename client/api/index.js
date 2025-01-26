@@ -7,7 +7,9 @@ const app = express();
 const port = 3000;
 
 // mmiddleware
-app.use(bodyParser.json());
+var bodyParser = require('body-parser');
+app.use(bodyParser.json({limit: '420mb'}));
+app.use(bodyParser.urlencoded({limit: '420mb', extended: true}));
 app.use(cors());
 
 // mongoDB connection
@@ -50,6 +52,7 @@ const PlantImage = mongoose.model("PlantImages", plantImageScheme)
 // })
 
 app.post('/plants', async (req, res) => {
+    console.log(req.body)
     try {
       const newPlantImage = new PlantImage({
         image: req.body.image, // Base64 image data
@@ -93,6 +96,7 @@ app.delete('/plants/:id', async(req,res) => {
     }
 })
 
+app.use((req) => console.log(req));
 
 app.listen(port, () => {
     console.log("Server is running on", port);
